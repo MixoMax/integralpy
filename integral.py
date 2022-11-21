@@ -1,39 +1,42 @@
 import math
 import string
 import matplotlib.pyplot as plt
+import numpy as np
 
 #To Do
 #Funktionen nur in intervallen hinzufügen: Syntax: "x**2,i0-20;x**3,i20-25"
 #
+if(0==0):
+    function = str(input("Funktion: "))
+    stepsize = int(input("Schritgröße (Schritte pro Einheit): "))
+    minx = float(eval(input("von: ")))
+    maxx = float(eval(input("bis: ")))
 
-function = str(input("Funktion: "))
-stepsize = int(input("Schritgröße (Schritte pro Einheit): "))
-minx = float(eval(input("von: ")))
-maxx = float(eval(input("bis: ")))
+
 
 def splitFunction(function):
 
     functionArray = []
-    if(function.count("i") == 0):
-        return function
+    if(function.count("i") >= 1):
+        function = function.split("i")
+        return function[0]
     else:
-        for l in range(function.count(";")):
-            index = function.find("i")
-            
-            funcxy = [function[int(0):int(index-1)], function[int(index+1):int(function.find("-")), int(function.find("-")+1):int(function.find(";")-1)]]
-            if len(function) > index:
-                function = function[int(0) : int(index) : ] + function[int(index + 1) : :]
-                function = function[int(function.find("-")) : ] + function[int(function.find("-")+1) : :]
-                function = function[int(0) : int(function.find(";")) : ] + function[int(function.find(";")+1) : :]
-            functionArray.append(funcxy)
+        functionArray = function.split(";")
+        for i in range(len(functionArray)):
+            functionArray[i] = functionArray[i].split("i")
+            functionArray[i][1] = functionArray[i][1].split("-")
+        print(functionArray)
+        print(len(functionArray))
         
         return functionArray
 
-def getY(xcoord, function):
-    x = str(xcoord)
-    function = function.replace("x", str(float(x)))
-    y = eval(function)
-    return y
+#get y value for x
+def getY(xcoord, functionArray):
+    x = float(xcoord)
+    for i in range(len(functionArray)):
+        if(float(xcoord) >= float(functionArray[i][1][0]) and float(xcoord) <= float(functionArray[i][1][1])):
+            return eval(functionArray[i][0])
+
 
 def calcSize(x1,y1,x2,y2):
     size = (x1-x2)*(y1-y2)
@@ -55,10 +58,9 @@ def calcXY(stepsize, functionArray):
     yArray = []
     xArray = []
     if(type(functionArray is int)):
-        print(functionArray)
         for xcoord in range(len(functionArray)*stepsize+1):
             xcoord = (xcoord/stepsize)
-            yArray.append(getY(xcoord, function = functionArray))
+            yArray.append(getY(xcoord, functionArray))
             xArray.append(xcoord)
         return xArray, yArray
     
@@ -84,4 +86,5 @@ functionArray = splitFunction(function)
 xArray, yArray = calcXY(stepsize, functionArray)
 print(calcArea(xArray, yArray))
 plot(xArray, yArray)
-#
+
+print(functionArray)
