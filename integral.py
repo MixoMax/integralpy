@@ -6,6 +6,8 @@ import numpy as np
 #To Do
 #Funktionen nur in intervallen hinzufügen: Syntax: "x**2,i0-20;x**3,i20-25"
 #
+#add documentation
+
 if(0==0):
     function = str(input("Funktion: "))
     stepsize = int(input("Schritgröße (Schritte pro Einheit): "))
